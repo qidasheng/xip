@@ -6,6 +6,9 @@ linux c下基于纯真ip数据库开发的ip查询http形式的server
 yum install -y libevent libevent-devel        
 
 
+#替换xip.c源文件71行中的/home/qidasheng/QQWry.Dat路径为QQWry.Dat文件在本机的实际路径            
+
+
 #安装xip      
 gcc -Wall -c cjson/cJSON.c  -lm
 gcc -Wall -c libqqwry/qqwry.c         
