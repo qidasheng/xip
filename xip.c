@@ -358,7 +358,7 @@ int main (int argc, char *argv[]) {
 
         if( !file_exists(db_path) )   {
                 printf("%s :No such file\r\n", db_path);
-				exit(0);
+		exit(0);
 	}
 
 	if (daemon == 1) {
