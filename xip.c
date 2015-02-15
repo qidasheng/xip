@@ -308,10 +308,10 @@ static void show_help(void) {
     char *b = "--------------------------------------------------------------------------------------------------\n"
             "Author: qidasheng, E-mail: qsf.zzia1@hotmail.com\n"
             "\n"
-            "-l <ip_addr>    监听地址\n"
-            "-p <num>        监听端口\n"
-            "-P <path>       纯真数据库路径,默认./QQWry.Dat\n"
-            "-d              后台运行\n"
+            "-l <ip_addr>    interface to listen on\n"
+            "-p <num>        TCP port number to listen on\n"
+            "-P <path>       QQWry.Dat file path, default: ./QQWry.Dat\n"
+            "-d              run as a daemon\n"
             "\n"
             "Please visit \"https://github.com/qidasheng/xip\" for more help information.\n\n"
             "--------------------------------------------------------------------------------------------------\n"
@@ -358,6 +358,7 @@ int main (int argc, char *argv[]) {
 
         if( !file_exists(db_path) )   {
                 printf("%s :No such file\r\n", db_path);
+				exit(0);
 	}
 
 	if (daemon == 1) {
