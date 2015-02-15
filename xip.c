@@ -21,6 +21,8 @@
 
 char *result;
 struct timeval before , after;
+char *db_path = "./QQWry.Dat";
+
 double time_diff(struct timeval x , struct timeval y)
 {
 	double x_ms , y_ms , diff;
@@ -65,21 +67,21 @@ char *trim_str (char *str){
 char *query_ip(const char *ip) {
     result = (char *) malloc (1024);
     bzero(result, 1024);
-    char country[1024]={'\0'};
-    char area[1024]={'\0'};
+    char country[1024] = {'\0'};
+    char area[1024] = {'\0'};
     FILE *wry_file;
-    wry_file=fopen("/home/qidasheng/QQWry.Dat","r");
-    qqwry_get_location(country,area,ip,wry_file);
+    wry_file = fopen(db_path,"r");
+    qqwry_get_location(country, area, ip, wry_file);
     fclose(wry_file);
     if (strlen(country)>0) {
         sprintf(result, "%s", country);
     }
 
-    if (strlen(area)>0) {
-        if (strlen(country)>0) {
+    if (strlen(area) > 0) {
+        if (strlen(country) > 0) {
             sprintf(result, "%s ",result);
         }
-        if (strlen(country)<=0) {
+        if (strlen(country) <= 0) {
             sprintf(result, "unknown");
         } else {
             sprintf(result, "%s %s",result, area);
@@ -304,11 +306,12 @@ int run_http(char *host, int port) {
 
 static void show_help(void) {
     char *b = "--------------------------------------------------------------------------------------------------\n"
-            "Author: qishengfu, E-mail: qsf.zzia1@hotmail.com\n"
+            "Author: qidasheng, E-mail: qsf.zzia1@hotmail.com\n"
             "\n"
-            "-l <addr>     ip address\n"
-            "-p <port>     listen port\n"
-            "-d            run as a daemon\n"
+            "-l <ip_addr>    监听地址\n"
+            "-p <num>        监听端口\n"
+            "-P <path>       纯真数据库路径,默认./QQWry.Dat\n"
+            "-d              后台运行\n"
             "\n"
             "Please visit \"https://github.com/qidasheng/xip\" for more help information.\n\n"
             "--------------------------------------------------------------------------------------------------\n"
@@ -322,7 +325,7 @@ int main (int argc, char *argv[]) {
 	char *host = NULL;
 	int  port = 0;
         int daemon = 0;
-        while((oc = getopt(argc, argv, "l:p:d")) != -1)
+        while((oc = getopt(argc, argv, "l:p:P:d")) != -1)
         {
                 switch(oc)
                 {
@@ -331,6 +334,9 @@ int main (int argc, char *argv[]) {
                                 break;
                         case 'p':
                                 port = atoi(optarg);
+                                break;
+                        case 'P':
+                                db_path = optarg;
                                 break;
                         case 'd':
                                 daemon = 1;
@@ -349,6 +355,11 @@ int main (int argc, char *argv[]) {
 	if (host == NULL || port == 0) {
 		show_help();
 	}
+
+        if( !file_exists(db_path) )   {
+                printf("%s :No such file\r\n", db_path);
+	}
+
 	if (daemon == 1) {
 		xip_daemon();
 	}
